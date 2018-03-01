@@ -1,25 +1,14 @@
 package util;
 
-public class Patient {
-	private String name;
+public class Patient extends Person {
 	private String data;
-	private Division division;
 	
 	public Patient(String name, String data, Division division) {
-		this.name = name;
+		super(name, division, Type.PATIENT);
 		this.data = data;
-		this.division = division;
 	}
 	
-	public String getPatient() {
-		return name;
-	}
-	
-	public String getPatientData() {
+	public String getData() {
 		return data;
-	}
-	
-	public Division getPatientDivision() {
-		return division;
 	}
 }

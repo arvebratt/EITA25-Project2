@@ -1,13 +1,8 @@
 package util;
 
-public class GovAgency {
-	private String name;
+public class GovAgency extends Person {
 
-	public GovAgency(String name) {
-		this.name = name;
-	}
-	
-	public String getGovAgency() {
-		return name;
+	public GovAgency(String name, Division division) {
+		super(name, division, Type.GOVERMENTAGENCY);
 	}
 }

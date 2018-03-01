@@ -3,9 +3,7 @@ package client;
 import java.net.*;
 import java.io.*;
 import javax.net.ssl.*;
-
 import util.*;
-
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -49,7 +47,7 @@ public class Client {
 				System.out.print("Certificate Passphrase: ");
 				pass = scan.nextLine();
 
-				stream = new FileInputStream("./certificates/clientkeystore" /*"./certificates/" + username + "/" + username + ".jks"**/);
+				stream = new FileInputStream("./certificates/clientkeystores/" + username + "keystore");
 				notFound = false;
 			} catch (FileNotFoundException e) {
 				notFound = true;
@@ -99,29 +97,61 @@ public class Client {
 			} while (!status.equals("accepted"));
 
 			// Parse welcome message
-			System.out.println("Welcome: " + nu.receive());
+			System.out.println("Welcome " + nu.receive());
 
-			// http://en.wikipedia.org/wiki/REPL
-			String response = null;
-			String userInput = null;
-			do {
+			boolean run = true;
+			while(run) {
+				System.out.println(nu.receive());
 				System.out.print("Enter command: ");
-
+				nu.send(scan.nextLine());
 				// Read - input from client -> server
-				userInput = scan.nextLine();
-				System.out.println("Input: " + userInput);
-				nu.send(userInput);
-
-				// Eval - output form server -> client
-				response = nu.receive();
-				System.out.println("Read Server:");
-				System.out.println(response);
-
-				// Print - print result
-				// System.out.println("Handled: " + response);
-
-				// Loop - repeat!
-			} while (response != null);
+				switch(Integer.parseInt(nu.receive())) {
+				case 1:
+					System.out.println(nu.receive());
+					break;
+				case 2:
+					System.out.println(nu.receive());
+					System.out.print("Choose a Patient: ");
+					nu.send(scan.nextLine());
+					System.out.print("Write new Data: ");
+					nu.send(scan.nextLine());
+					break;
+				case 3:
+					if(nu.receive().equals("bye")) {
+						System.out.println("You must be a Doctor to write a new record");
+						break;
+					} else {
+						System.out.println(nu.receive());
+						System.out.print("Choose a Nurse: ");
+						nu.send(scan.nextLine());
+						System.out.print("Name Patient: ");
+						nu.send(scan.nextLine());
+						System.out.print("Write patient data: ");
+						nu.send(scan.nextLine());
+						System.out.println(nu.receive());
+						System.out.print("Choose a Division: ");
+						nu.send(scan.nextLine());
+						System.out.print("Choose the patients password: ");
+						nu.send(scan.nextLine());
+						break;
+					}
+				case 4:
+					if(nu.receive().equals("bye")) {
+						System.out.println("You must be a goverment Agency to delete a record");
+						break;
+					} else {
+						System.out.println(nu.receive());
+						System.out.print("Choose a record to delete: ");
+						nu.send(scan.nextLine());
+						break;
+					}					
+				case 5:
+					System.exit(-1);
+					break;
+				default:
+					break;
+				}
+			}
 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

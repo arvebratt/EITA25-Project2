@@ -1,19 +1,8 @@
 package util;
 
-public class Nurse {
-	private Division division;
-	private String name;
+public class Nurse extends Person {
 	
 	public Nurse(String name, Division division) {
-		this.division = division;
-		this.name = name;
-	}
-	
-	public String getNurse() {
-		return name;
-	}
-	
-	public Division getDivision() {
-		return division;
+		super(name, division, Type.NURSE);
 	}
 }

@@ -1,8 +1,5 @@
 package util;
 
-import java.security.AccessControlException;
-import java.util.ArrayList;
-
 import util.Division;
 import util.Doctor;
 import util.Nurse;
@@ -14,64 +11,40 @@ public class Record {
 	private Nurse nurse;
 	private Division division;
 	private String data;
-	private ArrayList<Record> jurnals;
 
 	public Record(Patient patient, Doctor doctor, Nurse nurse) {
 		this.patient = patient;
 		this.doctor = doctor;
 		this.nurse = nurse;
-		this.data = patient.getPatientData();
+		this.data = patient.getData();
 		this.division = doctor.getDivision();
-		jurnals = new ArrayList<>();
 	}
 	
-	public String patientRead(Patient patient) throws AccessControlException{
-		if(patient.getPatient() == this.patient.getPatient()) {
-			return data;
+	public boolean read(Person person) {
+		if(person.getName() == this.patient.getName() || 
+				person.getType() == Type.NURSE && person.getDivision() == this.division || 
+				person.getType() == Type.DOCTOR && person.getDivision() == this.division 
+				|| person.getType() == Type.GOVERMENTAGENCY) {
+			return true;
 	}
-		throw new AccessControlException("Not enough access to read.");
-	}
-	
-	public String nurseRead(Nurse nurse) throws AccessControlException{
-		if(nurse.getDivision() == this.division) {
-			return data;
-	}
-		throw new AccessControlException("Not enough access to read.");
+		return false;
 	}
 	
-	public void nurseWrite(Nurse nurse, String newData) throws AccessControlException{
-		if(nurse.getNurse() == this.nurse.getNurse()) {
+	public boolean write(Person person) {
+		if(person.getName() == this.nurse.getName() || 
+				person.getName() == this.doctor.getName()) {
+			return true;
+	}
+		return false;
+	}
+	
+	public void writeToRecord(String newData) {
 			data = newData;
 	}
-		throw new AccessControlException("Not enough access to write.");
-	}
 	
-	public String doctorRead(Doctor doctor) throws AccessControlException{
-		if(doctor.getDivision() == this.division) {
-			return data;
-	}
-		throw new AccessControlException("Not enough access to read.");
-	}
-	
-	public void doctorWrite(Doctor doctor, String newData) throws AccessControlException{
-		if(doctor.getDoctor() == this.doctor.getDoctor()) {
-			data = newData;
-	}
-		throw new AccessControlException("Not enough access to write.");
-	}
-	
-	public void doctorNewRecord(Patient patient, Doctor doctor, Nurse nurse) {
-		Record newRecord = new Record(patient, doctor, nurse);
-		jurnals.add(newRecord);
-	}
-	
-	public void govDelete(Record record) {
-		record = new Record(null, null, null);
-		jurnals.remove(record);
-	}
-	
-	public String govRead(Record record) {
-		return record.data;
+	public String toString() {
+		return "Patient: " + patient.getName() + " Nurse: " + nurse.getName() + " Doctor: "
+				+ doctor.getName() + " Division: " + division.toString() + " Data: " + data;
 	}
 }
 
