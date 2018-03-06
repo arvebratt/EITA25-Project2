@@ -13,7 +13,7 @@ Choose a user by writing: doctor0, doctor1, patient0, patient1, patient2, patien
 Certificate passphrase: password
 
 User specific password(Password, different for each username):
-Username:password
+Username:password\\
 doctor0:doc0
 doctor1:doc1
 patient0:pat0
